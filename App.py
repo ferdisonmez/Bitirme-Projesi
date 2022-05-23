@@ -36,14 +36,13 @@ def predict():
     if request.method == "POST":
 
         url = request.form["url"]
-        print(url)
-        print(generate_data_set(url))
-        x = np.array(generate_data_set(url)).reshape(1,21)
+        dataset=generate_data_set(url)
+        x = np.array(dataset).reshape(1,21)
         y_pred =gbc.predict(x)[0]
         y_pro_phishing = gbc.predict_proba(x)[0, 0]
         y_pro_non_phishing = gbc.predict_proba(x)[0, 1]
         pred = "It is {0:.2f} % safe to go ".format(y_pro_phishing*100)
-        return render_template('index.html',xx =round(y_pro_non_phishing,2),url=url)
+        return render_template('index.html',xx =round(y_pro_non_phishing,2),len=len(dataset),dataset=dataset,url=url)
     return render_template("index.html", xx=-1)
 
 
